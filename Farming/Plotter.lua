@@ -1,25 +1,37 @@
-Plotter = {total_farm_size=0, side_length=0}
+Plotter = {}
 
-local current_state = "LEFT"
+local turning_state = "LEFT"
 local trigger_block = "minecraft:redstone_torch"
+
+local total_farm_size = 0
+local side_length = 0
+
+-- Instanciates Class
+function Plotter:new(plotter)
+    plotter = plotter or {}
+    setmetatable(plotter, self)
+    self.__index = self
+
+    return plotter
+end
 
 local movement = {
     LEFT = function()
         turtle.turnLeft()
         turtle.forward()
         turtle.turnLeft()
-        current_state = "RIGHT"
+        turning_state = "RIGHT"
     end,
     RIGHT = function()
         turtle.turnRight()
         turtle.forward()
         turtle.turnRight()
-        current_state = "LEFT"
+        turning_state = "LEFT"
     end
 }
 
 local function handle_turning()
-    local state = movement[current_state]
+    local state = movement[turning_state]
 
     if state then
         state()
@@ -28,16 +40,26 @@ local function handle_turning()
     end
 end
 
--- Instanciates Class
-function Plotter:new(plotter)
-    plotter = plotter or {}
+local function reset_position()
+    -- turn around function somewhere
+    turtle.turnLeft()
+    turtle.turnLeft()
+    turtle.forward()
 
-    setmetatable(plotter, self)
-    self.__index = self
+    local move_counter = 1
 
-    plotter:scan()
-    return plotter
+    while move_counter <= total_farm_size + 1 do
+        if math.fmod(move_counter, side_length) == 0 and move_counter ~= total_farm_size then
+            handle_turning()
+        elseif move_counter ~= total_farm_size then
+            turtle.forward()
+        end
+        move_counter = move_counter + 1
+    end
+
+    -- turn around function somewhere
 end
+
 
 function Plotter:scan()
     local first_trigger_seen = false
@@ -57,7 +79,7 @@ function Plotter:scan()
             end
 
             if has_block then
-                self.total_farm_size = self.total_farm_size + 1
+                total_farm_size = total_farm_size + 1
 
                 if not has_block_front then
                     turtle.forward()
@@ -71,19 +93,21 @@ function Plotter:scan()
             end
         end
 
-        self.side_length = math.sqrt(self.total_farm_size)
-        -- write to file from the file module
+        side_length = math.sqrt(total_farm_size)
+
+        -- put this in a different module/class
+        local file = io.open("settings.txt", "w")
+        if file then
+            file:write("{total_farm_size=", total_farm_size,",side_length=",side_length,"}")
+            file:close()
+        else
+            print("CREATE FILE DNE ERROR :3")
+        end
+
+        reset_position()
     else
         print("CREATE NO REDSTONE TORCH ERROR :3")
     end
-end
-
-function Plotter:get_side_length()
-    return self.side_length
-end
-
-function Plotter:get_total_farm_size()
-    return self.total_farm_size
 end
 
 return Plotter
