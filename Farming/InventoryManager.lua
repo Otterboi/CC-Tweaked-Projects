@@ -3,6 +3,9 @@ InventoryManager = {}
 local max_inventory_size = 16
 
 function InventoryManager.store(config_manager)
+    -- put all coal in coal storage
+    -- put all seeds in seed storage
+    -- everything else into chest
     local item = nil
 
     for i = 1, max_inventory_size do
@@ -16,7 +19,7 @@ function InventoryManager.store(config_manager)
     end
 end
 
-function InventoryManager.count_seeds()
+function InventoryManager.count_item(item)
     
 end
 
