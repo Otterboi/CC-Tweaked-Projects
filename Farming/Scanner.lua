@@ -1,24 +1,23 @@
-Plotter = {}
+Scanner = {}
 
 local trigger_block = "minecraft:redstone_torch"
 
-local total_farm_size = 0
-local side_length = 0
-local crop_max_age = 0
-local crop_name = ""
-
 -- Instanciates Class
-function Plotter:new(plotter)
-    plotter = plotter or {}
-    setmetatable(plotter, self)
+function Scanner:new(scanner)
+    scanner = scanner or {}
+    setmetatable(scanner, self)
     self.__index = self
 
-    return plotter
+    return scanner
 end
 
-function Plotter:scan(movement, config_manager, CropTable)
+function Scanner:scan(movement)
     local first_trigger_seen = false
     local has_block, block_data = turtle.inspectDown()
+    local crop_name = ""
+    local seed_name = turtle.getItemDetail(2)
+    local total_farm_size = 0
+    local side_length = 0
 
     if block_data.name == trigger_block then
         first_trigger_seen = true
@@ -27,7 +26,6 @@ function Plotter:scan(movement, config_manager, CropTable)
 
         _, block_data = turtle.inspectDown()
         crop_name = block_data.name
-        crop_max_age = CropTable.get_age(crop_name)
 
         while first_trigger_seen do
             local has_block_front, _ = turtle.inspect()
@@ -55,12 +53,10 @@ function Plotter:scan(movement, config_manager, CropTable)
 
         side_length = math.sqrt(total_farm_size)
 
-        config_manager:store({total_farm_size=total_farm_size, side_length=side_length, crop_max_age=crop_max_age, crop_name=crop_name})
-
-        movement:move(config_manager:get_total_farm_size(), config_manager:get_side_length(), nil)
+        return total_farm_size, side_length, crop_name, seed_name["name"]
     else
         print("CREATE NO REDSTONE TORCH ERROR :3")
     end
 end
 
-return Plotter
+return Scanner

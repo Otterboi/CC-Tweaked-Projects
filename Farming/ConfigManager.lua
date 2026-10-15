@@ -1,4 +1,4 @@
-ConfigManager = {total_farm_size=0, side_length=0, crop_max_age=0, crop_name=""}
+ConfigManager = {total_farm_size=0, side_length=0, crop_max_age=0, crop_name="", seed_name=""}
 
 local file_name = "farming_config.txt"
 
@@ -30,6 +30,7 @@ function ConfigManager:load()
         self.crop_name = data.crop_name
 
         file:close()
+        return true
     end
 end
 
@@ -37,7 +38,8 @@ function ConfigManager:store(config_data)
     local file = io.open(file_name, "w")
     if file then
         file:write("{total_farm_size=", config_data.total_farm_size, ",side_length=", config_data.side_length,
-                   ",crop_max_age=", config_data.crop_max_age, ",crop_name=\"", config_data.crop_name, "\"}")
+                   ",crop_max_age=", config_data.crop_max_age, ",crop_name=\"", config_data.crop_name, "\"",
+                   ",seed_name=\"", config_data.seed_name, "\"}")
         file:close()
         self:load()
     else
@@ -59,6 +61,10 @@ end
 
 function ConfigManager:get_crop_name()
     return self.crop_name
+end
+
+function ConfigManager:get_seed_name()
+    return self.seed_name
 end
 
 return ConfigManager
