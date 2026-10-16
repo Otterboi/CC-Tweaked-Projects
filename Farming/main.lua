@@ -27,7 +27,6 @@ end
 -- TODO
 -- 4. Create class/module for 
 --                            restocking -> get seed for easy searching (needs to know what the total amount of seeds are in the inventory ex: iventory search)
---                            dumping all items into chest that isnt coal and the required amount of seeds
 -- 5. Create harvesting movement_action
 -- 6. Properly throw errors and handling
 
