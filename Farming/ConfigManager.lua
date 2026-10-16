@@ -24,12 +24,16 @@ function ConfigManager:load()
 
     if file then
         local data = textutils.unserialise(file:read())
+
         self.total_farm_size = data.total_farm_size
         self.side_length = data.side_length
         self.crop_max_age = data.crop_max_age
         self.crop_name = data.crop_name
+        self.seed_name = data.seed_name
 
         file:close()
+
+        print("Farming config successfully loaded!")
         return true
     end
 end

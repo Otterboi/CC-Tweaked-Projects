@@ -13,12 +13,12 @@ function CropTable.get_age(crop)
     local crop_age = -1
 
     if mod_name == "minecraft" then
-        crop_age = CropTable.crop_ages[crop_name] or CropTable.crop_ages["default"]
+        crop_age = CropTable.crop_ages[crop_name]
     else
-        crop_age = CropTable.crop_ages[mod_name] or CropTable.crop_ages["default"]
+        crop_age = CropTable.crop_ages[mod_name]
     end
 
-    return crop_age
+    return crop_age or CropTable.crop_ages["default"]
 end
 
 return CropTable

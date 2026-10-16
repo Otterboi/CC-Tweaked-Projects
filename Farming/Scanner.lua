@@ -11,6 +11,8 @@ function Scanner:new(scanner)
     return scanner
 end
 
+-- build error handling for seed_name (if no item in slot)
+--                          trigger_block (none detected)
 function Scanner:scan(movement)
     local first_trigger_seen = false
     local has_block, block_data = turtle.inspectDown()

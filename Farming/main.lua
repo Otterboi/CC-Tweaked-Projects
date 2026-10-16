@@ -1,17 +1,19 @@
 local Scanner = require("Scanner")
 local Movement = require("Movement")
-local refuel = require("Refuel")
-local restock = require("Restock")
-local iventory_manager = require("InventoryManager")
+local Refuel = require("Refuel")
+local Restock = require("Restock")
+local InventoryManager = require("InventoryManager")
 local ConfigManager = require("ConfigManager")
-local CropTable = require("crop_table")
+local CropTable = require("CropTable")
 
 local movement = Movement:new()
 local scanner = Scanner:new()
 local config_manager = ConfigManager:new()
 
 if config_manager:load() then
-    refuel.check_fuel(config_manager)
+    movement:park()
+    Refuel.check_fuel(config_manager)
+    InventoryManager.store(config_manager)
 else
     local total_farm_size, side_length, crop_name, seed_name = scanner:scan(movement)
     local crop_max_age = CropTable.get_age(crop_name)

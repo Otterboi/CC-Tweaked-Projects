@@ -65,4 +65,16 @@ function Movement:move(total_farm_size, side_length, action)
     reset_rotation()
 end
 
+function Movement:park()
+    local has_block, block_data = turtle.inspectDown()
+    local is_chest = string.match(block_data.name, "chest")
+
+    if has_block then
+        if not is_chest then
+            turtle.back()
+        end
+    end
+
+end
+
 return Movement
