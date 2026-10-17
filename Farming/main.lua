@@ -5,16 +5,28 @@ local Restock = require("Restock")
 local InventoryManager = require("InventoryManager")
 local ConfigManager = require("ConfigManager")
 local CropTable = require("CropTable")
+local MovementActions = require("MovementActions")
 
 local movement = Movement:new()
 local scanner = Scanner:new()
 local config_manager = ConfigManager:new()
 
 if config_manager:load() then
+    -- Add these to a function 
     movement:park()
     InventoryManager.store(config_manager)
     Refuel.check_fuel(config_manager)
     Restock.restock(config_manager)
+    movement:ready()
+
+    while true do
+        local has_block, block_data = turtle.inspectDown()
+
+        if block_data.state.age == config_manager:get_crop_max_age() then
+            movement:move(config_manager:get_total_farm_size(), config_manager:get_side_length(), MovementActions.harvest(config_manager))
+        end
+
+    end
 else
     local total_farm_size, side_length, crop_name, seed_name = scanner:scan(movement)
     local crop_max_age = CropTable.get_age(crop_name)

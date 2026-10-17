@@ -11,9 +11,9 @@ function Refuel.check_fuel(config_manager)
         turtle.turnLeft()
         turtle.select(1)
 
-        for _ = 0, total_fuel_required do
+        for _ = 1, total_fuel_required do
+            turtle.suck()
             turtle.refuel()
-            turtle.suck(stack_size)
         end
 
         turtle.turnRight()

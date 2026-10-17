@@ -45,7 +45,7 @@ end
 -- Change this so that it can be used for harvesting and not
 -- just resetting position as its resuable coded
 function Movement:move(total_farm_size, side_length, action)
-    reset_rotation()
+    --reset_rotation()
 
     local move_counter = 1
 
@@ -75,6 +75,10 @@ function Movement:park()
         end
     end
 
+end
+
+function Movement:ready()
+    turtle.forward()
 end
 
 return Movement
