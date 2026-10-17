@@ -12,8 +12,9 @@ local config_manager = ConfigManager:new()
 
 if config_manager:load() then
     movement:park()
-    Refuel.check_fuel(config_manager)
     InventoryManager.store(config_manager)
+    Refuel.check_fuel(config_manager)
+    Restock.restock(config_manager)
 else
     local total_farm_size, side_length, crop_name, seed_name = scanner:scan(movement)
     local crop_max_age = CropTable.get_age(crop_name)

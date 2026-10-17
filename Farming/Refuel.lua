@@ -2,21 +2,18 @@ Refuel = {}
 
 local stack_size = 64
 
+-- throw error if fuel still isnt enough
 function Refuel.check_fuel(config_manager)
-    local attempts = 10
-    local is_refueled = false
+    local farm_size = config_manager:get_total_farm_size()
+    local total_fuel_required = math.ceil((farm_size * 2) / stack_size)
 
-    if turtle.getFuelLevel() <= config_manager:get_total_farm_size() * 2 then
+    if turtle.getFuelLevel() <= farm_size * 2 then
         turtle.turnLeft()
         turtle.select(1)
 
-        while turtle.getFuelLevel() <= config_manager:get_total_farm_size() * 2 and attempts ~= 0 do
-            is_refueled = turtle.refuel()
+        for _ = 0, total_fuel_required do
+            turtle.refuel()
             turtle.suck(stack_size)
-
-            if not is_refueled then
-                attempts = attempts - 1
-            end
         end
 
         turtle.turnRight()
