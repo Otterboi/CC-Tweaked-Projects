@@ -9,45 +9,40 @@ local MovementActions = require("MovementActions")
 
 local movement = Movement:new()
 local scanner = Scanner:new()
-local config_manager = ConfigManager:new()
 
-if config_manager:load() then
-    -- Add these to a function 
+-- TODO
+-- 6. Properly throw errors and handling
+
+local function docking()
     movement:park()
-    InventoryManager.store(config_manager)
-    Refuel.check_fuel(config_manager)
-    Restock.restock(config_manager)
+    InventoryManager.store()
+    Refuel.check_fuel()
+    Restock.restock()
     movement:ready()
+end
 
-    while true do
-        local has_block, block_data = turtle.inspectDown()
-
-        if block_data.state.age == config_manager:get_crop_max_age() then
-            movement:move(config_manager:get_total_farm_size(), config_manager:get_side_length(), MovementActions.harvest(config_manager))
-        end
-
-    end
+if ConfigManager.load() then
+    docking()
 else
     local total_farm_size, side_length, crop_name, seed_name = scanner:scan(movement)
     local crop_max_age = CropTable.get_age(crop_name)
     local config_data = {total_farm_size=total_farm_size, side_length=side_length, crop_max_age=crop_max_age, crop_name=crop_name, seed_name=seed_name}
 
-    config_manager:store(config_data)
+    ConfigManager.store(config_data)
 
-    movement:move(config_manager:get_total_farm_size(), config_manager:get_side_length(), nil)
+    movement:move(ConfigManager.total_farm_size, ConfigManager.side_length, nil)
+
+    docking()
 end
 
--- TODO
--- 4. Create class/module for 
---                            restocking -> get seed for easy searching (needs to know what the total amount of seeds are in the inventory ex: iventory search)
--- 5. Create harvesting movement_action
--- 6. Properly throw errors and handling
+-- Main loop
+while true do
+    local _, block_data = turtle.inspectDown()
 
--- HOW IT SHOULD RUN:
--- Check if settings.txt exsits
--- If if does, go straight to main farming loop
---     doesnt, Plotting -> Farming loop
--- Once the turtle gets to the end of its movement check, Refule
---                                                        Reseed
---                                                        Store items in chest
---                                                        Return to waiting position
+    if block_data.state.age == ConfigManager.crop_max_age then
+        movement:move(ConfigManager.total_farm_size, ConfigManager.side_length, MovementActions.harvest)
+        movement:move(ConfigManager.total_farm_size, ConfigManager.side_length, MovementActions.harvest)
+
+        docking()
+    end
+end

@@ -1,10 +1,12 @@
+local ConfigManager = require("ConfigManager")
+
 Refuel = {}
 
 local stack_size = 64
 
 -- throw error if fuel still isnt enough
-function Refuel.check_fuel(config_manager)
-    local farm_size = config_manager:get_total_farm_size()
+function Refuel.check_fuel()
+    local farm_size = ConfigManager.total_farm_size
     local total_fuel_required = math.ceil((farm_size * 2) / stack_size)
 
     if turtle.getFuelLevel() <= farm_size * 2 then

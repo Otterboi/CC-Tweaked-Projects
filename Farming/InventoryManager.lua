@@ -1,8 +1,10 @@
+local ConfigManager = require("ConfigManager")
+
 InventoryManager = {}
 
 local max_inventory_size = 16
 
-function InventoryManager.store(config_manager)
+function InventoryManager.store()
     turtle.select(1)
     turtle.turnLeft()
 
@@ -14,7 +16,7 @@ function InventoryManager.store(config_manager)
         if item then
             turtle.select(i)
 
-            if item["name"] == config_manager:get_seed_name() then
+            if item["name"] == ConfigManager.seed_name then
                 turtle.dropUp()
             elseif  item["name"] == "minecraft:coal" then
                 turtle.drop()
