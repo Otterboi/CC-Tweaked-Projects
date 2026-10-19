@@ -4,64 +4,76 @@ InventoryManager = {}
 
 local max_inventory_size = 16
 
-function InventoryManager.store()
-    turtle.select(1)
-    turtle.turnLeft()
-
+local function process_inventory(more_details, callback)
     local item = nil
+    local result = nil
 
     for i = 1, max_inventory_size do
-        item = turtle.getItemDetail(i)
+        item = turtle.getItemDetail(i, more_details)
 
         if item then
-            turtle.select(i)
+            result = callback(item, i)
 
-            if item["name"] == ConfigManager.seed_name then
-                turtle.dropUp()
-            elseif  item["name"] == "minecraft:coal" then
-                turtle.drop()
-            else
-                turtle.dropDown()
+            if result then
+                return result
             end
         end
     end
 
-    turtle.turnRight()
+    return nil
+end
+
+function InventoryManager.store()
+    turtle.select(1)
+
+    process_inventory(false, function (item, i)
+        turtle.select(i)
+
+        if item["name"] == ConfigManager.seed_name then
+            turtle.dropUp()
+        elseif  item["name"] == "minecraft:coal" then
+            turtle.drop()
+        else
+            turtle.dropDown()
+        end
+    end)
+
     turtle.select(1)
 end
 
 function InventoryManager.count_item(item_name)
     local total_items = 0
-    local item = nil
 
-    for i = 1, max_inventory_size do
-        item = turtle.getItemDetail(i)
-
-        if item then
-            if item["name"] == item_name then
-                total_items = total_items + item["count"]
-            end
+    process_inventory(false, function (item, _)
+        if item["name"] == item_name then
+            total_items = total_items + item["count"]
         end
-    end
+    end)
 
     return total_items
 end
 
--- throw error if no item is fond
 function InventoryManager.find_slot_id(item_name)
-    local item = nil
+    local slot = process_inventory(false, function (item, i)
+        if item["name"] == item_name then
+            return i
+        end
+    end)
 
-    for i = 1, max_inventory_size do
-        item = turtle.getItemDetail(i)
+    return slot or -1
+end
 
-        if item then
-            if item["name"] == item_name then
-                return i
+function InventoryManager.find_seed()
+    local seed = process_inventory(true, function (item, _)
+        for key, _ in pairs(item["tags"]) do
+            if key == "c:seeds" or key == "c:crops" then
+                print(item["name"])
+                return item["name"]
             end
         end
-    end
+    end)
 
-    return -1
+    return seed
 end
 
 return InventoryManager

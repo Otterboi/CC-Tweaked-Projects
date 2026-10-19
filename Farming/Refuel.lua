@@ -4,13 +4,11 @@ Refuel = {}
 
 local stack_size = 64
 
--- throw error if fuel still isnt enough
 function Refuel.check_fuel()
     local farm_size = ConfigManager.total_farm_size
     local total_fuel_required = math.ceil((farm_size * 2) / stack_size)
 
     if turtle.getFuelLevel() <= farm_size * 2 then
-        turtle.turnLeft()
         turtle.select(1)
 
         for _ = 1, total_fuel_required do
@@ -18,8 +16,13 @@ function Refuel.check_fuel()
             turtle.refuel()
         end
 
-        turtle.turnRight()
+        if turtle.getFuelLevel() <= farm_size * 2 then
+            error("Not enough fuel! Terminating program!", 0)
+            return false
+        end
     end
+
+    return true
 end
 
 return Refuel
