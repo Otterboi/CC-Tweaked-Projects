@@ -2,9 +2,11 @@
 A collections of Projects for the Mincraft Mod [CC:Tweaked](https://tweaked.cc/)
 
 ## [Farming](/Farming)
-- Uses a Farming Turtle to harvest crops with a growth age of 7.
-- Replants the crop if seeds are available and the crop was harvested.
-- Auto refuling when coal is in the 1st slot.
+- Uses a Farming Turtle to harvest crops of any age.
+- Farmland must be a square only but can be of any size.
+- Auto harvests crops and replants them.
+- Auto refuling before the turtle starts its harvesting journey.
+- Stores all items in a chest below the turtle.
 
 ## [Monitor](/Monitor)
 - A simple monitor using [basalt](https://basalt.madefor.cc/).
