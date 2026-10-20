@@ -1,8 +1,14 @@
+-- Author: Otterboi_
+-- Movement Actions module contains all the strategies required
+-- during the movement state of the turtle.
+
 local InventoryManager = require("InventoryManager")
 local ConfigManager = require("ConfigManager")
 
 local MovementActions = {}
 
+-- Harvests the crop below the turtle if its ready to
+-- be harvests then replants it.
 function MovementActions.harvest()
     local seed_slot = -1
     local _, block_data = turtle.inspectDown()

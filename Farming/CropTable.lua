@@ -1,3 +1,7 @@
+-- Author: Otterboi_
+-- Crop Table module stores and retrieves the various crop
+-- ages depending on mod and crop.
+
 CropTable = {}
 
 CropTable.crop_ages = {
@@ -8,6 +12,8 @@ CropTable.crop_ages = {
     default = 7
 }
 
+-- Gets the age of the crop from its mod/name.
+-- Returns the crops age.
 function CropTable.get_age(crop)
     local mod_name, crop_name = string.match(crop, "(.+):(.+)")
     local crop_age = -1

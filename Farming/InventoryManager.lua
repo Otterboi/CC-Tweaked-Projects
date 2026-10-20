@@ -1,9 +1,14 @@
-local ConfigManager = require("ConfigManager")
+-- Author: Otterboi_
+-- Inventory Manager module which will process the inventory of the turtle
+-- using the strategy pattern.
 
 InventoryManager = {}
 
 local max_inventory_size = 16
 
+-- Main entrance for each strategy.
+-- Loops through every inventory slot and runs the strategy returning
+-- any necessary values.
 local function process_inventory(more_details, callback)
     local item = nil
     local result = nil
@@ -23,6 +28,8 @@ local function process_inventory(more_details, callback)
     return nil
 end
 
+-- Takes all items in the turtles inventory and stores
+-- them in their appropriate areas.
 function InventoryManager.store()
     turtle.select(1)
 
@@ -39,6 +46,7 @@ function InventoryManager.store()
     turtle.select(1)
 end
 
+-- Finds the total number of an item in the turtle's inventory.
 function InventoryManager.count_item(item_name)
     local total_items = 0
 
@@ -51,6 +59,7 @@ function InventoryManager.count_item(item_name)
     return total_items
 end
 
+-- Gets the slot id of a specific number in the turtle's inventory
 function InventoryManager.find_slot_id(item_name)
     local slot = process_inventory(false, function (item, i)
         if item["name"] == item_name then
@@ -61,6 +70,7 @@ function InventoryManager.find_slot_id(item_name)
     return slot or -1
 end
 
+-- Finds where the crop seed is located in the turtle's inventory.
 function InventoryManager.find_seed()
     local seed = process_inventory(true, function (item, _)
         for key, _ in pairs(item["tags"]) do

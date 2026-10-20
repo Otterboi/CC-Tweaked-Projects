@@ -1,3 +1,6 @@
+-- Author: Otterboi_
+-- Auto farmland scanning and farming turtle
+
 local Scanner = require("Scanner")
 local Movement = require("Movement")
 local Refuel = require("Refuel")
@@ -9,10 +12,8 @@ local MovementActions = require("MovementActions")
 local movement = Movement:new()
 local scanner = Scanner:new()
 
--- TODO
--- Proper Documentation
-
-local function docking()
+-- Sets the turtle to its default docking position.
+local function dock()
     movement:park()
     InventoryManager.store()
     Refuel.check_fuel()
@@ -21,6 +22,8 @@ local function docking()
     print("Waiting for crop to grow...")
 end
 
+-- Initilizes the turtles state preparing it for scanning.
+-- Throws an error if there is no fuel in the turtle.
 local function init_turtle()
     movement:park()
     turtle.suck(1)
@@ -37,8 +40,10 @@ local function init_turtle()
     movement:ready()
 end
 
+-- Docks the turtle if a config file is found loading it into memory.
+-- Initilizes the turtle, scans the farmland and generates the config file otherwise.
 if ConfigManager.load() then
-    docking()
+    dock()
 else
     init_turtle()
 
@@ -48,7 +53,7 @@ else
 
     ConfigManager.store(config_data)
 
-    docking()
+    dock()
 end
 
 -- Main loop
@@ -59,9 +64,9 @@ while true do
         print("Farming...")
 
         for i = 0, 1 do
-            movement:move(ConfigManager.total_farm_size, ConfigManager.side_length, MovementActions.harvest)
+            movement:move(MovementActions.harvest)
         end
 
-        docking()
+        dock()
     end
 end

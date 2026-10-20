@@ -1,3 +1,7 @@
+-- Author: Otterboi_
+-- Scanner class that will scan the entire farmland and 
+-- retrieve the necessary data for harvesting. 
+
 local InventoryManager = require("InventoryManager")
 
 Scanner = {}
@@ -10,7 +14,8 @@ function Scanner:new(scanner)
     return scanner
 end
 
--- change this so that it only grabs the length (since only squares are allowed)
+-- Scans the farmland and returns the total farm size,
+-- side length, crop name and seed name
 function Scanner:scan(movement)
     print("Scanning farmland!")
 
@@ -20,7 +25,6 @@ function Scanner:scan(movement)
     local total_farm_size = 0
     local side_length = 0
 
-    --_, block_data = turtle.inspectDown()
     crop_name = block_data.name
 
     while true do
