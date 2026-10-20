@@ -39,15 +39,20 @@ end
 function Movement:reset_rotation()
     turtle.turnLeft()
     turtle.turnLeft()
-    turtle.forward()
 end
 
--- Change this so that it can be used for harvesting and not
--- just resetting position as its resuable coded
+function Movement:return_to_chest(steps)
+    for _= 1, steps do
+        turtle.forward()
+    end
+
+    self:reset_rotation()
+end
+
 function Movement:move(total_farm_size, side_length, action)
     local move_counter = 1
 
-    while move_counter <= total_farm_size + 1 do
+    while move_counter <= total_farm_size do
         if action then
             action()
         end

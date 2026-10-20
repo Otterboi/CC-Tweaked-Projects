@@ -2,8 +2,6 @@ local InventoryManager = require("InventoryManager")
 
 Scanner = {}
 
-local trigger_block = "minecraft:redstone_torch"
-
 -- Instanciates Class
 function Scanner:new(scanner)
     scanner = scanner or {}
@@ -12,8 +10,7 @@ function Scanner:new(scanner)
     return scanner
 end
 
--- build error handling for seed_name (if no item in slot)
---                          trigger_block (none detected)
+-- change this so that it only grabs the length (since only squares are allowed)
 function Scanner:scan(movement)
     print("Scanning farmland!")
 
@@ -23,33 +20,25 @@ function Scanner:scan(movement)
     local total_farm_size = 0
     local side_length = 0
 
-    _, block_data = turtle.inspectDown()
+    --_, block_data = turtle.inspectDown()
     crop_name = block_data.name
 
     while true do
-        local has_block_front, _ = turtle.inspect()
         has_block, block_data = turtle.inspectDown()
 
-        if block_data.name == trigger_block then
-            break
-        end
-
-        if has_block then
-            total_farm_size = total_farm_size + 1
-
-            if not has_block_front then
-                turtle.forward()
-            else
-                movement:handle_turning()
-            end
-
+        if has_block and block_data["name"] == crop_name then
+            side_length = side_length + 1
+            turtle.forward()
         else
             turtle.back()
-            movement:handle_turning()
+            movement:reset_rotation()
+            break
         end
     end
 
-    side_length = math.sqrt(total_farm_size)
+    movement:return_to_chest(side_length)
+
+    total_farm_size = side_length * side_length
 
     print("Scanning complete!")
     return total_farm_size, side_length, crop_name, seed_name

@@ -29,9 +29,7 @@ function InventoryManager.store()
     process_inventory(false, function (item, i)
         turtle.select(i)
 
-        if item["name"] == ConfigManager.seed_name then
-            turtle.dropUp()
-        elseif  item["name"] == "minecraft:coal" then
+        if  item["name"] == "minecraft:coal" then
             turtle.drop()
         else
             turtle.dropDown()
@@ -73,7 +71,7 @@ function InventoryManager.find_seed()
     end)
 
     if not seed then
-        error("Crop seeds cannot be found!\nEnsure seeds are in the turtle inventory or in an inventory above the turtle!",0)
+        error("Crop seeds cannot be found!\n\nEnsure seeds are in the turtle or in the 1st slot of the chest below the turtle's docking position.",0)
     end
 
     return seed
