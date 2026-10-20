@@ -16,6 +16,8 @@ function Restock.restock()
     if InventoryManager.count_item(ConfigManager.seed_name) < farm_size then
         error("Not enough seeds to maintain farm! Terminating program!", 0)
     end
+
+    print("Restock successful!")
 end
 
 return Restock

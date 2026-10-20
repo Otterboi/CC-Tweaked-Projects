@@ -22,6 +22,7 @@ function Refuel.check_fuel()
         end
     end
 
+    print("Refueling successful!")
     return true
 end
 

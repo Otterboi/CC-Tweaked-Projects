@@ -11,8 +11,8 @@ local movement = Movement:new()
 local scanner = Scanner:new()
 
 -- TODO
--- 5. Add print statemnts to show that the turtle is working 
--- 6. Properly throw errors and handling
+-- Proper Documentation
+-- Refactor scanner to only look for crop blocks
 
 local function docking()
     movement:park()
@@ -20,6 +20,8 @@ local function docking()
     Refuel.check_fuel()
     Restock.restock()
     movement:ready()
+
+    print("Waiting for crop to grow...")
 end
 
 local function init_turtle()
@@ -53,8 +55,11 @@ while true do
     local _, block_data = turtle.inspectDown()
 
     if block_data.state.age == ConfigManager.crop_max_age then
-        movement:move(ConfigManager.total_farm_size, ConfigManager.side_length, MovementActions.harvest)
-        movement:move(ConfigManager.total_farm_size, ConfigManager.side_length, MovementActions.harvest)
+        print("Farming...")
+
+        for i = 0, 1 do
+            movement:move(ConfigManager.total_farm_size, ConfigManager.side_length, MovementActions.harvest)
+        end
 
         docking()
     end

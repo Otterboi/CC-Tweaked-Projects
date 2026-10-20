@@ -8,18 +8,18 @@ ConfigManager.seed_name = ""
 
 local file_name = "farming_config.txt"
 
-local function get_file_if_exists(mode)
+local function get_file(mode)
     local file = io.open(file_name, mode)
 
     if not file then
-        return nil, "FILE DNE ERROR or CANNOT READ :3"
+        return nil
     end
 
     return file
 end
 
 function ConfigManager.load()
-    local file = get_file_if_exists("r")
+    local file = get_file("r")
 
     if file then
         local data = textutils.unserialise(file:read())
@@ -34,11 +34,14 @@ function ConfigManager.load()
 
         print("Farming config successfully loaded!")
         return true
+    else
+        print("Farming config not found!")
     end
 end
 
 function ConfigManager.store(config_data)
-    local file = io.open(file_name, "w")
+    local file = get_file("w")
+
     if file then
         file:write("{total_farm_size=", config_data.total_farm_size, ",side_length=", config_data.side_length,
                    ",crop_max_age=", config_data.crop_max_age, ",crop_name=\"", config_data.crop_name, "\"",
@@ -46,7 +49,7 @@ function ConfigManager.store(config_data)
         file:close()
         ConfigManager.load()
     else
-        print("CREATE FILE DNE ERROR :3")
+        error("Unable to write farming config file!", 0)
     end
 end
 

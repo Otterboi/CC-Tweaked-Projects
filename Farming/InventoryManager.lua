@@ -67,11 +67,14 @@ function InventoryManager.find_seed()
     local seed = process_inventory(true, function (item, _)
         for key, _ in pairs(item["tags"]) do
             if key == "c:seeds" or key == "c:crops" then
-                print(item["name"])
                 return item["name"]
             end
         end
     end)
+
+    if not seed then
+        error("Crop seeds cannot be found!\nEnsure seeds are in the turtle inventory or in an inventory above the turtle!",0)
+    end
 
     return seed
 end

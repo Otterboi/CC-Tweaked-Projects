@@ -9,13 +9,14 @@ function Scanner:new(scanner)
     scanner = scanner or {}
     setmetatable(scanner, self)
     self.__index = self
-
     return scanner
 end
 
 -- build error handling for seed_name (if no item in slot)
 --                          trigger_block (none detected)
 function Scanner:scan(movement)
+    print("Scanning farmland!")
+
     local has_block, block_data = turtle.inspectDown()
     local crop_name = ""
     local seed_name = InventoryManager.find_seed()
@@ -50,6 +51,7 @@ function Scanner:scan(movement)
 
     side_length = math.sqrt(total_farm_size)
 
+    print("Scanning complete!")
     return total_farm_size, side_length, crop_name, seed_name
 end
 

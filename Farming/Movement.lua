@@ -57,6 +57,7 @@ function Movement:move(total_farm_size, side_length, action)
         elseif move_counter ~= total_farm_size then
             turtle.forward()
         end
+
         move_counter = move_counter + 1
     end
 
