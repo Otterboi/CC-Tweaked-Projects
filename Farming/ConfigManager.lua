@@ -30,8 +30,8 @@ function ConfigManager.load()
     if file then
         local data = textutils.unserialise(file:read())
 
-        ConfigManager.total_farm_size = data.total_farm_size
-        ConfigManager.side_length = data.side_length
+        ConfigManager.length = data.length
+        ConfigManager.width = data.width
         ConfigManager.crop_max_age = data.crop_max_age
         ConfigManager.crop_name = data.crop_name
         ConfigManager.seed_name = data.seed_name
@@ -50,7 +50,7 @@ function ConfigManager.store(config_data)
     local file = get_file("w")
 
     if file then
-        file:write("{total_farm_size=", config_data.total_farm_size, ",side_length=", config_data.side_length,
+        file:write("{length=", config_data.length, ",width=", config_data.width,
                    ",crop_max_age=", config_data.crop_max_age, ",crop_name=\"", config_data.crop_name, "\"",
                    ",seed_name=\"", config_data.seed_name, "\"}")
         file:close()

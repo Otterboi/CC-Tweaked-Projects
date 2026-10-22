@@ -47,9 +47,9 @@ if ConfigManager.load() then
 else
     init_turtle()
 
-    local total_farm_size, side_length, crop_name, seed_name = scanner:scan(movement)
+    local length, width, crop_name, seed_name = scanner:scan(movement)
     local crop_max_age = CropTable.get_age(crop_name)
-    local config_data = {total_farm_size=total_farm_size, side_length=side_length, crop_max_age=crop_max_age, crop_name=crop_name, seed_name=seed_name}
+    local config_data = {length=length, width=width, crop_max_age=crop_max_age, crop_name=crop_name, seed_name=seed_name}
 
     ConfigManager.store(config_data)
 
@@ -63,7 +63,7 @@ while true do
     if block_data.state.age == ConfigManager.crop_max_age then
         print("Farming...")
 
-        for i = 0, 1 do
+        for _ = 0, 1 do
             movement:move(MovementActions.harvest)
         end
 

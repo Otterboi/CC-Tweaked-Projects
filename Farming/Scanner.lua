@@ -22,30 +22,34 @@ function Scanner:scan(movement)
     local has_block, block_data = turtle.inspectDown()
     local crop_name = ""
     local seed_name = InventoryManager.find_seed()
-    local total_farm_size = 0
-    local side_length = 0
+    local length = 0
+    local width = 0
+    local scanning = true
 
     crop_name = block_data.name
 
-    while true do
+    while scanning do
         has_block, block_data = turtle.inspectDown()
 
         if has_block and block_data["name"] == crop_name then
-            side_length = side_length + 1
+            width = width + 1
             turtle.forward()
         else
             turtle.back()
-            movement:reset_rotation()
-            break
+            if length == 0 then
+                turtle.turnLeft()
+                length = width
+                width = 0
+            else
+                scanning = false
+            end
         end
     end
 
-    movement:return_to_chest(side_length)
-
-    total_farm_size = side_length * side_length
+    movement:return_to_chest(width, length)
 
     print("Scanning complete!")
-    return total_farm_size, side_length, crop_name, seed_name
+    return length, width, crop_name, seed_name
 end
 
 return Scanner
