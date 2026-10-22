@@ -60,4 +60,8 @@ function ConfigManager.store(config_data)
     end
 end
 
+function ConfigManager.get_file_name()
+    return file_name
+end
+
 return ConfigManager

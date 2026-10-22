@@ -12,6 +12,30 @@ local MovementActions = require("MovementActions")
 local movement = Movement:new()
 local scanner = Scanner:new()
 
+-- Gets command arguments
+local args = {...}
+
+if args[1] == "--reset" then
+    shell.run("rm", ConfigManager.get_file_name())
+
+    print("Farming config file has been removed!")
+    return
+elseif args[1] == "--help" then
+    local help_str = "USAGE\n" ..
+                     "farming_main [OPTION]\n\n" ..
+                     "DESCRIPTION\n" ..
+                     "A farming turtle which will farm a NxM area for any crop.\n\n" ..
+                     "--reset\n" ..
+                     "Deletes the config file which allows the turtle to scan.\n\n" ..
+                     "--help\n" ..
+                     "Shows this help menu\n\n" ..
+                     "AUTHOR\n" ..
+                     "Written by Otterboi_"
+
+    textutils.pagedPrint(help_str)
+    return
+end
+
 -- Sets the turtle to its default docking position.
 local function dock()
     movement:park()
