@@ -3,10 +3,11 @@ A collections of Projects for the Mincraft Mod [CC:Tweaked](https://tweaked.cc/)
 
 ## [Farming](/Farming)
 - Uses a Farming Turtle to harvest crops of any age.
-- Farmland must be a square only but can be of any size.
+- Farmland can be of size NxM.
 - Auto harvests crops and replants them.
 - Auto refuling before the turtle starts its harvesting journey.
 - Stores all items in a chest below the turtle.
+- `Usage: farming_main [OPTIONS]`
 
 ## [Monitor](/Monitor)
 - A simple monitor using [basalt](https://basalt.madefor.cc/).
